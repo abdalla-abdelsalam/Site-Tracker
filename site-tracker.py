@@ -1,35 +1,59 @@
 import os
 import smtplib
 import requests
+from pathlib import Path
+from dotenv import load_dotenv
 from linode_api4 import LinodeClient, Instance
 
-EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
-EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
-LINODE_TOKEN = os.environ.get('LINODE_TOKEN')
+
+def load_env_variables():
+    env_path = Path('.')/'.env'
+    load_dotenv(dotenv_path=env_path)
 
 
 def notify_admin():
-    with smtplib.SMTP_SSL('smtp.gmail.com', 587) as smtp:
+
+    EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+    EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
         subject = 'YOUR SITE IS DOWN!'
-        body = 'Make sure the server restarted and it is back up'
+        body = 'Make sure the server restarted and it is up and running'
         msg = f'Subject: {subject}\n\n{body}'
-        smtp.sendmail(EMAIL_ADDRESS, 'INSERT_RECEIVER_ADDRESS', msg)
+        smtp.sendmail(EMAIL_ADDRESS, 'abdallahmahdy01@gmail.com', msg)
+
 
 
 def reboot_server():
-    client = LinodeClient(LINODE_TOKEN)
-    my_server = client.load(Instance, 376715)
-    my_server.reboot()
+    try:
+        LINODE_TOKEN = os.environ.get('LINODE_TOKEN')
+        client = LinodeClient(LINODE_TOKEN)
+        my_server = client.load(Instance, 376715)
+        my_server.reboot()
+    except Exception:
+        print("invalid api token")
+    
+
+def test_the_site():
+    
+    SITE_ADDRESS = os.environ.get('SITE_ADDRESS')
+    if SITE_ADDRESS:
+        try:
+            res = requests.get(SITE_ADDRESS, timeout=5)
+            if res.status_code != 200:
+                raise Exception()
+
+        except Exception:
+            notify_admin()
+            reboot_server()
+        
 
 
-try:
-    r = requests.get('https://example.com', timeout=5)
+if __name__=='__main__':
+    load_dotenv()
+    test_the_site()
 
-    if r.status_code != 200:
-        notify_admin()
-        reboot_server()
-except Exception as e:
-    notify_admin()
-    reboot_server()
+
+

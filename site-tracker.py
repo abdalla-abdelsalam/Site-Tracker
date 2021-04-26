@@ -15,6 +15,7 @@ def notify_admin():
 
     EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
     EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
@@ -22,7 +23,7 @@ def notify_admin():
         subject = 'YOUR SITE IS DOWN!'
         body = 'Make sure the server restarted and it is up and running'
         msg = f'Subject: {subject}\n\n{body}'
-        smtp.sendmail(EMAIL_ADDRESS, 'abdallahmahdy01@gmail.com', msg)
+        smtp.sendmail(EMAIL_ADDRESS, ADMIN_EMAIL, msg)
 
 
 

@@ -8,7 +8,7 @@ and send an email to the system admin telling him that the site is down
 
 ## notes:
   1. linode api is used to connect to the server and reboot it
-  1. you need to add your credentials (EMAIL_ADDRESS,EMAIL_PASSWORD,ADMIN_EMAIL,LINODE_TOKEN,SITE_ADDRESS) into .env file, credentials will be stored as env variables 
+  1. you need to add your credentials: (EMAIL_ADDRESS,EMAIL_PASSWORD,ADMIN_EMAIL,LINODE_TOKEN,SITE_ADDRESS) to .env file, credentials will be stored as env variables 
   1. you can make the script up and running every 10 minutes by adding it to your task scheduler (if you are in linux you can use cron job)
   
   ## installation 

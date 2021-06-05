@@ -2,7 +2,7 @@
 
 ## Description 
 
-a simple python script to track your website status in case your site is down the script will reboot the server automatically 
+python script to track your website status in case your site is down the script will reboot the server automatically 
 and send an email to the system admin telling him that the site is down
 
 
